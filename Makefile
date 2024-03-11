@@ -9,8 +9,6 @@ build:
 	@echo "Building ./build/elights.sh"
 	@mkdir -p ./build
 	@echo "#!/usr/bin/env bash\n" > ${target_elights}
-	@cat ${path_helpers}/join_by.sh >> ${target_elights}
-	@echo >> ${target_elights}
 	@cat ${path_helpers}/print_stacktrace.sh >> ${target_elights}
 	@echo >> ${target_elights}
 	@cat ${path_helpers}/current_func_name.sh >> ${target_elights}
