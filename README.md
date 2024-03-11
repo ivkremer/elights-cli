@@ -1,6 +1,6 @@
 # Elgato Lights CLI
 
-## Preamble
+## About
 
 This is a CLI tool (probably mostly for macOS and Linux users) for operating Elgato Key Lights from your terminal app.
 At some point there was no official solution for working with something what is called "scenes" and that's why this
@@ -14,7 +14,31 @@ continue operating the lamps without using any official Elgato software.
 The setup process though is not very simple, so try to follow all the steps below in order to become not the only person
 on Earth who uses elights CLI! Reach me out if you have any questions or suggestions, I'm `ivkremer` everywhere.
 
-## Lamps Are Already Connected To Your Network Guide
+## `elights` Command Usage
+
+```
+Synopsis: elights [OPTIONS...]
+
+Options:
+
+-l, --lamp        [ID] specifies the lamp (as an integer ID starting from 1).
+-t, --temperature [VALUE] specifies lamp's temperature within the range [143-344]
+                  which represents the range of Kelvin from 2900K to 7000K.
+-b, --brightness  [VALUE] specifies lamp's brightness within the range [2-100].
+-e, --enabled     [VALUE] specifies the value of "on" option in the request. Can be only 0 or 1.
+-s, --scene       [SCENE_NAME] specifies the pre-configured scene.
+--on              an alias for "-e 1"
+--off             an alias for "-e 0"
+
+Examples:
+
+elights --scene work
+elights -l 1 -b 100 -t 150
+```
+
+## Installation Guides
+
+### If Your Lamps Are Already Connected To Your Network
 
 Clone this repo and run
 
@@ -22,9 +46,11 @@ Clone this repo and run
 make
 ```
 
-Move the `*.sh` files to whatever directory you prefer on your computer.
+If you run `make` for the first time it can take some time before it starts (less than a minute probably).
 
-Make sure your `$ELGATO_LIGHT_L_ADDRESS` and `$ELGATO_LIGHT_R_ADDRESS` env variables are setup properly.
+Move the `*.sh` files to whatever directory you prefer on your computer, e.g. `~/.zsh_helpers/elights`.
+
+Make sure your `$ELGATO_LIGHT_L_ADDRESS` and `$ELGATO_LIGHT_R_ADDRESS` env variables are set up properly.
 
 If you would like to use this tool from the terminal app only, consider your natural way of exporting these vars.
 
@@ -36,13 +62,13 @@ export ELGATO_LIGHT_L_ADDRESS=192.168.1.108
 export ELGATO_LIGHT_R_ADDRESS=192.168.1.102
 ```
 
-### Hints
-
 Add something similar to your `~/.zshrc` in order to use `elights` command.
 
 ```shell
 [ -f ~/.zsh_helpers/elights/elights.sh ] && source ~/.zsh_helpers/elights/elights.sh
 ```
+
+Now you can use `elights` as a command in your terminal.
 
 In Elgato Stream Deck app assign `"System > Open"` as an action handler for a button in the following way:
 

@@ -6,6 +6,7 @@
 # Synopsis: elights [OPTIONS...]
 #
 # Options:
+#
 # -l, --lamp        [ID] specifies the lamp (as an integer ID starting from 1).
 # -t, --temperature [VALUE] specifies lamp's temperature within the range [143-344]
 #                   which represents the range of Kelvin from 2900K to 7000K.
@@ -16,50 +17,51 @@
 # --off             an alias for "-e 0"
 #
 # Examples:
+#
 # elights --scene work
 # elights -l 1 -b 100 -t 150
 function elights {
   # arguments
-  declare -i LAMP
-  declare TEMPERATURE
-  declare BRIGHTNESS
-  declare ENABLED
-  declare SCENE=""
+  declare -i arg_lamp
+  declare arg_temperature
+  declare arg_brightness
+  declare arg_is_enabled
+  declare arg_scene=""
   declare POSITIONAL_ARGS=()
-  # end_arguments
+  # end arguments
 
   while [[ $# -gt 0 ]]; do
     case $1 in
     -l | --lamp)
-      LAMP="$2"
+      arg_lamp="$2"
       shift 2
       ;;
     -t | --temperature)
-      TEMPERATURE="$2"
+      arg_temperature="$2"
       shift 2
       ;;
     -b | --brightness)
-      BRIGHTNESS="$2"
+      arg_brightness="$2"
       shift 2
       ;;
     -e | --enabled)
-      ENABLED="$2"
+      arg_is_enabled="$2"
       shift 2
       ;;
     -s | --scene)
-      SCENE="$2"
+      arg_scene="$2"
       shift 2
       ;;
     --on)
-      ENABLED=1
+      arg_is_enabled=1
       shift
       ;;
     --off)
-      ENABLED=0
+      arg_is_enabled=0
       shift
       ;;
     -*)
-      echo -e "\033[0;31m$(_print_stacktrace)\n\n$(_current_func_name): Unknown option: \"$1\". Aborting.\033[0m"
+      echo -e "\033[0;31m$(_print_stacktrace "Bad usage:")\n$(_current_func_name): Unknown option: \"$1\". Aborting.\033[0m"
       return 1
       ;;
     *)
@@ -71,18 +73,18 @@ function elights {
 
   set -- "${POSITIONAL_ARGS[@]}"
 
-  if [[ -n $SCENE ]]; then
-    _set_scene "$SCENE"
-    return
+  if [[ -n $arg_scene ]]; then
+    _set_scene "$arg_scene"
+    return $?
   fi
 
-  if [[ -z $TEMPERATURE ]] && [[ -z $BRIGHTNESS ]] && [[ -z $ENABLED ]]; then
-    echo -e "\033[0;31m$(_print_stacktrace)\n\n$(_current_func_name): No options provided for the lamp. Aborting.\033[0m"
+  if [[ -z $arg_temperature ]] && [[ -z $arg_brightness ]] && [[ -z $arg_is_enabled ]]; then
+    echo -e "\033[0;31m$(_print_stacktrace "Bad usage:")\n$(_current_func_name): No options provided for the lamp. Aborting.\033[0m"
     return 1
   fi
 
   declare lamps_hostnames=()
-  case $LAMP in
+  case $arg_lamp in
   1)
     lamps_hostnames=("$ELGATO_LIGHT_L_ADDRESS")
     ;;
@@ -97,19 +99,20 @@ function elights {
 
   declare -a changes
 
-  if [[ -n $ENABLED ]]; then
-    changes+=('"on":'"$ENABLED")
+  if [[ -n $arg_is_enabled ]]; then
+    changes+=('"on": '"$arg_is_enabled")
   fi
 
-  if [[ -n $BRIGHTNESS ]]; then
-    changes+=('"brightness":'"$BRIGHTNESS")
+  if [[ -n $arg_brightness ]]; then
+    changes+=('"brightness": '"$arg_brightness")
   fi
 
-  if [[ -n $TEMPERATURE ]]; then
-    changes+=('"temperature":'"$TEMPERATURE")
+  if [[ -n $arg_temperature ]]; then
+    changes+=('"temperature": '"$arg_temperature")
   fi
 
-  # Note that arrays are 0-indexed in Bash and 1-indexed in Zsh, so for the sake of compatibility:
+  # Note that arrays are 0-indexed in Bash and 1-indexed in Zsh,
+  # so for the sake of compatibility we are concatenating JSON in the following way:
   declare changes_json="${changes[*]:0:1}"
   declare -i i
   for ((i = 1; i <= $#changes - 1; i++)); do
@@ -117,7 +120,7 @@ function elights {
   done
 
   declare request_json
-  request_json=$(printf '{"numberOfLights": 1, "lights": [{%s}]}' "$changes_json")
+  request_json=$(printf '{ "numberOfLights": 1, "lights": [{ %s }] }' "$changes_json")
 
   declare lamp_hostname
   for lamp_hostname in "${lamps_hostnames[@]}"; do
