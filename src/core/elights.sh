@@ -14,7 +14,7 @@ function elights {
   declare arg_positional=()
   # end arguments
 
-  declare version="1.3.0"
+  declare version="1.3.1"
 
   while [[ $# -gt 0 ]]; do
     case $1 in
@@ -56,7 +56,6 @@ function elights {
       ;;
     --)
       shift
-      break
       ;;
     -*)
       echo -e "\033[0;31m$(print_stacktrace "Bad usage:")\n$(print_func_name): Unknown option: \"$1\". Aborting.\033[0m"
