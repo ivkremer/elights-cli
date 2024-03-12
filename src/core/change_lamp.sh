@@ -1,6 +1,6 @@
 ## Sends specified JSON to the specified lamp. Usage:
-# _elights_change_lamp -l <lamp hostname> -b <JSON body> [--debug]
-function _elights_change_lamp {
+# change_lamp -l <lamp hostname> -b <JSON body> [--debug]
+function change_lamp {
   # arguments
   declare arg_lamp_hostname=""
   declare arg_request_json=""
@@ -22,14 +22,14 @@ function _elights_change_lamp {
       shift
       ;;
     *)
-      echo -e "\033[0;31m$(_elights_print_stacktrace "Bad usage:")\n$(_elights_current_func_name): Unknown option: \"$1\". Aborting.\033[0m"
+      echo -e "\033[0;31m$(print_stacktrace "Bad usage:")\n$(print_func_name): Unknown option: \"$1\". Aborting.\033[0m"
       return 1
       ;;
     esac
   done
 
   if [[ -z $arg_lamp_hostname ]]; then
-    echo -e "\033[0;31m$(_elights_print_stacktrace "Bad usage:")\n$(_elights_current_func_name): No lamp hostname provided. Aborting.\033[0m"
+    echo -e "\033[0;31m$(print_stacktrace "Bad usage:")\n$(print_func_name): No lamp hostname provided. Aborting.\033[0m"
     return 1
   fi
 
@@ -41,7 +41,7 @@ function _elights_change_lamp {
     declare output
     output=$(curl "$request_url" --request PUT --data "$arg_request_json" -m 10 --fail-with-body -s -S 2>&1 1>&2)
     if [[ $? -ne 0 ]]; then
-      echo -e "\033[0;31m$(_elights_print_stacktrace "Network error:")\n$(_elights_current_func_name): The following request to the lamp failed:\n"
+      echo -e "\033[0;31m$(print_stacktrace "Network error:")\n$(print_func_name): The following request to the lamp failed:\n"
       echo -e "curl $request_url --request PUT --data '$arg_request_json' -m 10:\n\n$output\nAborting.\033[0m"
       return 11
     fi
