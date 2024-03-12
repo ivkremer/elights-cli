@@ -1,10 +1,10 @@
 ##
 # Prints a stacktrace for a script and a function being currently executed.
 # e.g.:
-# echo -e "Error occurred:\n$(_print_stacktrace [error title])\n"
+# echo -e "Error occurred:\n$(_elights_print_stacktrace [error title])\n"
 # Inspired by: https://gist.github.com/akostadinov/33bb2606afe1b334169dfbf202991d36.
 # Line number in Bash is not displayed.
-function _print_stacktrace {
+function _elights_print_stacktrace {
   # arguments
   declare arg_header="$1"
   # end arguments
