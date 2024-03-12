@@ -26,9 +26,11 @@ Options:
                   which represents the range of Kelvin from 2900K to 7000K.
 -b, --brightness  [VALUE] specifies lamp's brightness within the range [2-100].
 -e, --enabled     [VALUE] specifies the value of "on" option in the request. Can be only 0 or 1.
--s, --scene       [SCENE_NAME] specifies the pre-configured scene.
 --on              an alias for "-e 1"
 --off             an alias for "-e 0"
+-s, --scene       [SCENE_NAME] specifies the pre-configured scene.
+-h, --help        Displays this reference.
+-v, --version     Displays the version of elights CLI.
 
 Examples:
 
@@ -40,7 +42,7 @@ elights -l 1 -b 100 -t 150
 
 ### If Your Lamps Are Already Connected To Your Network
 
-Clone this repo and run
+Clone this repo and run:
 
 ```shell
 make
@@ -74,8 +76,8 @@ In Elgato Stream Deck app assign `"System > Open"` as an action handler for a bu
 
 ![Elgato Stream Deck app action configuration](./readme_resources/stream-deck-action.png)
 
-Available scenes are described in [set_scenes.sh](./src/elights/set_scene.sh), change them accordingly to your
-preferences.  Automation of this process could be a next stage for this project :)
+Available scenes are described in [set_scenes.sh](src/core/set_scene.sh), change them accordingly to your preferences.
+Automation of this process could be a next stage for this project :)
 
 ## Initial Setup
 
@@ -85,12 +87,12 @@ preferences.  Automation of this process could be a next stage for this project 
 2. Press and hold Reset button for 10+ seconds and release it.
 3. The lamp should turn on at its maximum brightness shortly after that.
 4. Click on Wi-Fi icon in the macOS Control Center, the lamp which has been just reset should appear there as a New
-   Accessory item:
+Accessory item:
 
 ![Adding a lamp on macOS](./readme_resources/macos-adding-a-lamp.png)
 
 5. Click on it and pair to your Wi-Fi network. Change the name of the lamp if needed. Note, that some lamps do not
-   support 5GHz networks. Yes, this detail could be very sad for many users:
+support 5GHz networks. Yes, this detail could be very sad for many users:
 
 ![AirPort Utility on macOS](./readme_resources/macos-airport-utility.png)
 

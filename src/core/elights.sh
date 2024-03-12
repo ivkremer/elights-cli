@@ -1,4 +1,10 @@
 function elights {
+  ## function helpers/print_stacktrace.sh
+  ## function helpers/print_func_name.sh
+  ## function core/set_scene.sh
+  ## function core/change_lamp.sh
+  ## function core/print_help.sh
+
   # arguments
   declare -i arg_lamp
   declare arg_temperature
@@ -8,7 +14,7 @@ function elights {
   declare arg_positional=()
   # end arguments
 
-  declare version="1.2.1"
+  declare version="1.3.1"
 
   while [[ $# -gt 0 ]]; do
     case $1 in
@@ -41,7 +47,7 @@ function elights {
       shift
       ;;
     -h | --help)
-      _elights_print_help "$version"
+      print_help "$version"
       return
       ;;
     -v | --version)
@@ -52,7 +58,7 @@ function elights {
       shift
       ;;
     -*)
-      echo -e "\033[0;31m$(_elights_print_stacktrace "Bad usage:")\n$(_elights_current_func_name): Unknown option: \"$1\". Aborting.\033[0m"
+      echo -e "\033[0;31m$(print_stacktrace "Bad usage:")\n$(print_func_name): Unknown option: \"$1\". Aborting.\033[0m"
       return 1
       ;;
     *)
@@ -65,12 +71,12 @@ function elights {
   set -- "${arg_positional[@]}"
 
   if [[ -n $arg_scene ]]; then
-    _elights_set_scene "$arg_scene"
+    set_scene "$arg_scene"
     return $?
   fi
 
   if [[ -z $arg_temperature ]] && [[ -z $arg_brightness ]] && [[ -z $arg_is_enabled ]]; then
-    echo -e "\033[0;31m$(_elights_print_stacktrace "Bad usage:")\n$(_elights_current_func_name): No options provided for the lamp. Aborting.\033[0m"
+    echo -e "\033[0;31m$(print_stacktrace "Bad usage:")\n$(print_func_name): No options provided for the lamp. Aborting.\033[0m"
     return 1
   fi
 
@@ -115,6 +121,6 @@ function elights {
 
   declare lamp_hostname
   for lamp_hostname in "${lamps_hostnames[@]}"; do
-    _elights_change_lamp -l "$lamp_hostname" -b "$request_json"
+    change_lamp -l "$lamp_hostname" -b "$request_json"
   done
 }
