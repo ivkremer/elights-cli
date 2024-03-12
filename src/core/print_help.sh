@@ -1,10 +1,10 @@
-function _elights_print_help {
+function print_help {
   cat << endOfHelp
 elights CLI command v$1.
 
 Operates the Elgato Key Lights.
 
-Make sure ELGATO_LIGHT_L_ADDRESS and ELGATO_LIGHT_R_ADDRESS
+Make sure $ELGATO_LIGHT_L_ADDRESS and $ELGATO_LIGHT_R_ADDRESS
 env variables are properly set.
 
 Inspired by https://github.com/adamesch/elgato-key-light-api.
@@ -21,9 +21,9 @@ Options:
                     within the range [2..100].
   -e, --enabled     [VALUE] specifies the value of "on" option in the request.
                     Can be only 0 or 1.
-  -s, --scene       [SCENE_NAME] specifies the pre-configured scene.
   --on              an alias for "-e 1"
   --off             an alias for "-e 0"
+  -s, --scene       [SCENE_NAME] specifies the pre-configured scene.
   -h, --help        Displays this reference.
   -v, --version     Displays the version of elights CLI.
 
