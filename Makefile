@@ -20,6 +20,8 @@ build:
 	@cat ${path_core}/change_lamp.sh >> ${target_elights}
 	@echo >> ${target_elights}
 	@cat ${path_core}/elights.sh >> ${target_elights}
+	@echo >> ${target_elights}
+	@cat ${path_core}/print_help.sh >> ${target_elights}
 	@${echo_ok}
 	@echo "Copying ./build/scene.sh"
 	@cp ./src/scene.sh ./build/

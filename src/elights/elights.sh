@@ -1,25 +1,3 @@
-##
-# Operates the Elgato Key Lights.
-# Make sure ELGATO_LIGHT_L_ADDRESS and ELGATO_LIGHT_R_ADDRESS env variables are properly set.
-# Inspired by https://github.com/adamesch/elgato-key-light-api.
-#
-# Synopsis: elights [OPTIONS...]
-#
-# Options:
-#
-# -l, --lamp        [ID] specifies the lamp (as an integer ID starting from 1).
-# -t, --temperature [VALUE] specifies lamp's temperature within the range [143-344]
-#                   which represents the range of Kelvin from 2900K to 7000K.
-# -b, --brightness  [VALUE] specifies lamp's brightness within the range [2-100].
-# -e, --enabled     [VALUE] specifies the value of "on" option in the request. Can be only 0 or 1.
-# -s, --scene       [SCENE_NAME] specifies the pre-configured scene.
-# --on              an alias for "-e 1"
-# --off             an alias for "-e 0"
-#
-# Examples:
-#
-# elights --scene work
-# elights -l 1 -b 100 -t 150
 function elights {
   # arguments
   declare -i arg_lamp
@@ -27,8 +5,10 @@ function elights {
   declare arg_brightness
   declare arg_is_enabled
   declare arg_scene=""
-  declare POSITIONAL_ARGS=()
+  declare arg_positional=()
   # end arguments
+
+  declare version="1.2.0"
 
   while [[ $# -gt 0 ]]; do
     case $1 in
@@ -60,26 +40,38 @@ function elights {
       arg_is_enabled=0
       shift
       ;;
+    -h | --help)
+      _elights_print_help "$version"
+      return
+      ;;
+    -v | --version)
+      echo "$version"
+      return
+      ;;
+    --)
+      shift
+      break
+      ;;
     -*)
-      echo -e "\033[0;31m$(_print_stacktrace "Bad usage:")\n$(_current_func_name): Unknown option: \"$1\". Aborting.\033[0m"
+      echo -e "\033[0;31m$(_elights_print_stacktrace "Bad usage:")\n$(_elights_current_func_name): Unknown option: \"$1\". Aborting.\033[0m"
       return 1
       ;;
     *)
-      POSITIONAL_ARGS+=("$1")
+      arg_positional+=("$1")
       shift
       ;;
     esac
   done
 
-  set -- "${POSITIONAL_ARGS[@]}"
+  set -- "${arg_positional[@]}"
 
   if [[ -n $arg_scene ]]; then
-    _set_scene "$arg_scene"
+    _elights_set_scene "$arg_scene"
     return $?
   fi
 
   if [[ -z $arg_temperature ]] && [[ -z $arg_brightness ]] && [[ -z $arg_is_enabled ]]; then
-    echo -e "\033[0;31m$(_print_stacktrace "Bad usage:")\n$(_current_func_name): No options provided for the lamp. Aborting.\033[0m"
+    echo -e "\033[0;31m$(_elights_print_stacktrace "Bad usage:")\n$(_elights_current_func_name): No options provided for the lamp. Aborting.\033[0m"
     return 1
   fi
 
@@ -124,6 +116,6 @@ function elights {
 
   declare lamp_hostname
   for lamp_hostname in "${lamps_hostnames[@]}"; do
-    _change_lamp -l "$lamp_hostname" -b "$request_json"
+    _elights_change_lamp -l "$lamp_hostname" -b "$request_json"
   done
 }
