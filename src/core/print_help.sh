@@ -13,7 +13,7 @@ Synopsis: elights [OPTIONS...]
 
 Options:
 
-  -l, --lamp        [ID] specifies the lamp (as an integer ID, 1-indexed).
+  -l, --lamp        [LAMP_NAME] specifies the lamp.
   -t, --temperature [VALUE] specifies lamp's temperature
                     within the range [143..344]
                     which represents Kelvin [2900K..7000K] accordingly.
@@ -29,8 +29,12 @@ Options:
 
 Examples:
 
+  Set scene "work":
   > elights --scene work
-  > elights -l 1 -b 100 -t 150
+  Change lamp "L": brightness=100, temperature=150
+  > elights -l L -b 100 -t 150
+  Turn lamp "R" on:
+  > elights -l R -e 1
 
 Origin: https://github.com/ivkremer/elights-cli
 endOfHelp

@@ -1,3 +1,5 @@
+##
+# Check README.md for all details.
 function elights {
   ## function helpers/print_stacktrace.sh
   ## function helpers/print_func_name.sh
@@ -6,7 +8,7 @@ function elights {
   ## function core/print_help.sh
 
   # arguments
-  declare -i arg_lamp
+  declare arg_lamp
   declare arg_temperature
   declare arg_brightness
   declare arg_is_enabled
@@ -17,7 +19,7 @@ function elights {
   declare version="1.3.1"
 
   while [[ $# -gt 0 ]]; do
-    case $1 in
+    case "$1" in
     -l | --lamp)
       arg_lamp="$2"
       shift 2
@@ -75,36 +77,27 @@ function elights {
     return $?
   fi
 
-  if [[ -z $arg_temperature ]] && [[ -z $arg_brightness ]] && [[ -z $arg_is_enabled ]]; then
+  if [[ -z "$arg_temperature" ]] && [[ -z "$arg_brightness" ]] && [[ -z "$arg_is_enabled" ]]; then
     echo -e "\033[0;31m$(print_stacktrace "Bad usage:")\n$(print_func_name): No options provided for the lamp. Aborting.\033[0m"
     return 1
   fi
 
   declare lamps_hostnames=()
-  case $arg_lamp in
-  1)
-    lamps_hostnames=("$ELGATO_LIGHT_L_ADDRESS")
-    ;;
-  2)
-    lamps_hostnames=("$ELGATO_LIGHT_R_ADDRESS")
-    ;;
-  *)
-    # Apply to both lamps if no lamp was specified:
-    lamps_hostnames=("$ELGATO_LIGHT_L_ADDRESS" "$ELGATO_LIGHT_R_ADDRESS")
-    ;;
+  case "$arg_lamp" in
+## placeholder scene_cases
   esac
 
   declare -a changes
 
-  if [[ -n $arg_is_enabled ]]; then
+  if [[ -n "$arg_is_enabled" ]]; then
     changes+=('"on": '"$arg_is_enabled")
   fi
 
-  if [[ -n $arg_brightness ]]; then
+  if [[ -n "$arg_brightness" ]]; then
     changes+=('"brightness": '"$arg_brightness")
   fi
 
-  if [[ -n $arg_temperature ]]; then
+  if [[ -n "$arg_temperature" ]]; then
     changes+=('"temperature": '"$arg_temperature")
   fi
 
