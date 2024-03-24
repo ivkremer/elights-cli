@@ -16,7 +16,7 @@ function elights {
   declare arg_positional=()
   # end arguments
 
-  declare version="1.3.1"
+  declare version="2.0.0"
 
   while [[ $# -gt 0 ]]; do
     case "$1" in
