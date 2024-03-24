@@ -44,11 +44,11 @@ build:
 	@cat ${guide}
 
 clean:
-#	@rm ${fragment_scenes}
-#	@rm ${build}/set_scene.sh
-#	@rm ${build}/scene_cases.txt
-#	@rm ${build}/warnings.txt
-#	@rm ${guide}
+	@rm ${fragment_scenes}
+	@rm ${build}/set_scene.sh
+	@rm ${build}/scene_cases.txt
+	@rm ${build}/warnings.txt
+	@rm ${guide}
 
 check:
 	@echo "Build finished:\n"
