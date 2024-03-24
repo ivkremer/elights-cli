@@ -21,7 +21,7 @@ Synopsis: elights [OPTIONS...]
 
 Options:
 
--l, --lamp        [ID] specifies the lamp (as an integer ID starting from 1).
+-l, --lamp        [LAMP_NAME] specifies the lamp (as an integer ID starting from 1).
 -t, --temperature [VALUE] specifies lamp's temperature within the range [143-344]
                   which represents the range of Kelvin from 2900K to 7000K.
 -b, --brightness  [VALUE] specifies lamp's brightness within the range [2-100].
@@ -42,17 +42,37 @@ elights -l 1 -b 100 -t 150
 
 ### If Your Lamps Are Already Connected To Your Network
 
-Clone this repo and run:
+#### Set up your configuration file like this:
+
+```shell
+cat ~/.elights_scenes.ini
+
+[my_scene]
+LAMP_1={ "on": 1, "brightness": 2, "temperature": 344 }
+LAMP_2={ "on": 0, "brightness": 2, "temperature": 344 }
+[another_scene]
+LAMP_1={ "on": 1, "brightness": 25, "temperature": 280 }
+LAMP_2={ "on": 1, "brightness": 30, "temperature": 280 }
+...
+```
+
+Where sections are scene names (`"my_scene"` and `"another_scene"` in this case) and LHS tokens such as `LAMP_1` are
+the names of your lamps. After installation, you'll have to export the corresponding env vars with proper IP addresses.
+
+#### Clone this repo and run:
 
 ```shell
 make
 ```
 
-If you run `make` for the first time it can take some time before it starts (less than a minute probably).
+If you've never run `make` before on your machine it can hang for some time at first (still less than a minute
+probably).
+
+#### Copy `elights.sh` and `scene.sh`
 
 Move the `*.sh` files to whatever directory you prefer on your computer, e.g. `~/.zsh_helpers/elights`.
 
-Make sure your `$ELGATO_LIGHT_L_ADDRESS` and `$ELGATO_LIGHT_R_ADDRESS` env variables are set up properly.
+#### Set up your `$ELGATO_LIGHT_XXX_ADDRESS` env variables.
 
 If you would like to use this tool from the terminal app only, consider your natural way of exporting these vars.
 
@@ -75,9 +95,6 @@ Now you can use `elights` as a command in your terminal.
 In Elgato Stream Deck app assign `"System > Open"` as an action handler for a button in the following way:
 
 ![Elgato Stream Deck app action configuration](./readme_resources/stream-deck-action.png)
-
-Available scenes are described in [set_scenes.sh](src/core/set_scene.sh), change them accordingly to your preferences.
-Automation of this process could be a next stage for this project :)
 
 ## Initial Setup
 
