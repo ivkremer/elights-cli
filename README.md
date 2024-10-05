@@ -130,10 +130,10 @@ this guide will briefly describe how to accomplish this job with a TP-Link route
 
 ![LAN Settings in a TP Link router](./readme_resources/router-lan-settings.png)
 
-4. Navigate to Security → IP & MAC Binding.
-5. Click Add and fill the form with the MAC address and the IP address of your lamp which you've just found before:
+4. Check your DHCP IP address pool, on the screenshot above it goes from `192.168.1.100` to `192.168.1.199`.
+5. Add your lamps to the list of reserved addresses. Note that it should be outside the DHCP pool:
 
-![IP and MAC binding](./readme_resources/router-ip-and-mac-binding.png)
+![IP reservation](./readme_resources/router-ip-address-reservation.png)
 
 6. Now your lamp will never obtain a different IP address from the one you've just specified. Repeat this procedure for
 other lamps.
